@@ -4,6 +4,35 @@ open Fable.Core
 open Fable.Core.JsInterop
 open Fable.Import
 
+// function getBook() {
+//   const getBookRequest = new GetBookRequest();
+//   getBookRequest.setIsbn(60929871);
+//   grpc.unary(BookService.GetBook, {
+//     request: getBookRequest,
+//     host: host,
+//     onEnd: res => {
+//       const { status, statusMessage, headers, message, trailers } = res;
+//       console.log("getBook.onEnd.status", status, statusMessage);
+//       console.log("getBook.onEnd.headers", headers);
+//       if (status === Code.OK && message) {
+//         console.log("getBook.onEnd.message", message.toObject());
+//       }
+//       console.log("getBook.onEnd.trailers", trailers);
+//       queryBooks();
+//     }
+//   });
+// }
+
+let host = "https://localhost:9091"
+
+open Fable.Import.BookService
+let getBook() =
+    let getBookRequest = GetBookRequest()
+    getBookRequest.setIsbn(60929871.) // TODO why a float
+    // TODO need to import grpc-web-client
+    () // TODO
+
+
 let init() =
     let canvas = Browser.document.getElementsByTagName_canvas().[0]
     canvas.width <- 1000.
