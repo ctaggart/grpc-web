@@ -25,16 +25,30 @@ open Fable.Import
 
 let host = "https://localhost:9091"
 
-open Fable.Import.BookServicePb
+// open BookServicePb
+open book_service_pb
+
+// import {QueryBooksRequest, Book, GetBookRequest} from "../_proto/examplecom/library/book_service_pb";
+
+
 let getBook() =
     printfn "started getBook"
-    let getBookRequest = GetBookRequest()
+    // let getBookRequest = GetBookRequest()
+
+    // let getBookRequest: book_service_pb.GetBookRequest = import "GetBookRequest" "../../ts/_proto/examplecom/library/book_service_pb" // .js
+
+    let service: book_service_pb.IExports = importAll "../../ts/_proto/examplecom/library/book_service_pb" // .js
+    
+    let getBookRequest = service.GetBookRequest.Create()
+
     getBookRequest.setIsbn(60929871.) // TODO why a float
+    printfn "getBookRequest %A" getBookRequest
+
     // TODO need to import grpc-web-client
-    let req = GetBookRequest()
-    let options = grpc.UnaryRpcOptions(request = req, host = host, onEnd = fun res -> printfn "get book response")
-    grpc.Globals.unary(BookService.GetBook, options)
-    printfn "finished getBook"
+    // let req = GetBookRequest()
+    // let options = grpc.UnaryRpcOptions(request = req, host = host, onEnd = fun res -> printfn "get book response")
+    // grpc.Globals.unary(BookService.GetBook, options)
+    // printfn "finished getBook"
     ()
 
 

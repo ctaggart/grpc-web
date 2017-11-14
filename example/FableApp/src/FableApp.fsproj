@@ -3,7 +3,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="google-protobuf.fs" />
+    <Compile Include="protobuf.fs" />
     <Compile Include="grpc.fs" />
     <Compile Include="book_service_pb.fs" />
     <Compile Include="book_service_pb_service.fs" />
