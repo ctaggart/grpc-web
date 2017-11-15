@@ -26,7 +26,8 @@ open Fable.Import
 let host = "https://localhost:9091"
 
 // open BookServicePb
-open book_service_pb
+// open book_service_pb
+// open book_service_pb_service
 
 // import {QueryBooksRequest, Book, GetBookRequest} from "../_proto/examplecom/library/book_service_pb";
 
@@ -37,12 +38,40 @@ let getBook() =
 
     // let getBookRequest: book_service_pb.GetBookRequest = import "GetBookRequest" "../../ts/_proto/examplecom/library/book_service_pb" // .js
 
-    let service: book_service_pb.IExports = importAll "../../ts/_proto/examplecom/library/book_service_pb" // .js
+    let pb: book_service_pb.IExports = importAll "../../ts/_proto/examplecom/library/book_service_pb" // .js
+    let service: book_service_pb_service.BookService.IExports = importAll "../../ts/_proto/examplecom/library/book_service_pb"
     
-    let getBookRequest = service.GetBookRequest.Create()
+    let getBookRequest = pb.GetBookRequest.Create()
 
     getBookRequest.setIsbn(60929871.) // TODO why a float
     printfn "getBookRequest %A" getBookRequest
+
+    // let rpc: grpc.grpc.IExports = importAll "grpc-web-client/dist/grpc"
+    // import {grpc, Code, Metadata} from "grpc-web-client";
+    let rpc: grpc.grpc.IExports = import "grpc" "grpc-web-client"
+
+    // let options = rpc.UnaryRpcOptions.Create() // rpc.UnaryRpcOptions is not a constructor
+    let options = jsOptions<grpc.grpc.UnaryRpcOptions>(fun o ->
+        o.request <- getBookRequest
+        o.host <- host
+    )
+
+    // let method = service.GetBook
+    let method =
+        createObj [
+            "methodName" ==> "GetBook"
+            "service" ==> createObj [ "serviceName" ==> "examplecom.library.BookService" ]
+            "requestStream" ==> false
+            "responseStream" ==> false
+            "requestType" ==> "examplecom_library_book_service_pb.GetBookRequest"
+            "responseType" ==> "examplecom_library_book_service_pb.Book"
+        ]
+    // options.onEnd <- fun res -> printfn "got book response"
+
+    // let method = service.GetBook.Create()
+    
+    rpc.unary (method, options)
+
 
     // TODO need to import grpc-web-client
     // let req = GetBookRequest()
