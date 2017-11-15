@@ -21,8 +21,8 @@
     "loglevel": "1.5.0",
     "webpack": "3.6.0",
     "webpack-dev-server": "2.8.2",
-    "ts-loader": "^2.0.1",
-    "ts-protoc-gen": "0.3.2",
-    "typescript": "2.2.1"
+    "ts-loader": "^2.3.7",
+    "ts-protoc-gen": "0.4.0",
+    "typescript": "2.5.3"
   }
 }
