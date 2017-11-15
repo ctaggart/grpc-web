@@ -10,7 +10,6 @@ module grpc =
         // abstract unary: methodDescriptor: 'M * props: UnaryRpcOptions <'M, 'TRequest, 'TResponse> -> unit
         abstract unary: methodDescriptor: obj * props: UnaryRpcOptions -> unit
         abstract invoke: methodDescriptor: 'M * props: RpcOptions<'TRequest, 'TResponse> -> unit
-        abstract UnaryRpcOptions: UnaryRpcOptionsStatic with get, set
 
     type [<AllowNullLiteral>] ProtobufMessageClass<'T> =
         abstract deserializeBinary: bytes: Uint8Array -> 'T
@@ -29,16 +28,6 @@ module grpc =
         abstract requestType: ProtobufMessageClass<'TRequest> with get, set
         abstract responseType: ProtobufMessageClass<'TResponse> with get, set
 
-//   export type UnaryMethodDefinition<TRequest extends jspb.Message, TResponse extends jspb.Message> = MethodDefinition<TRequest, TResponse> & {
-//     responseStream: false;
-//   }
-
-    // type UnaryMethodDefinition<'TRequest, 'TResponse> =
-    // type UnaryMethodDefinition<'TRequest, 'TResponse when 'TRequest :> protobuf.Message and 'TResponse :> protobuf.Message> =
-    //     inherit MethodDefinition<'TRequest, 'TResponse>
-    //     abstract responseStream: bool with get, set
-        // obj
-        // interface end
     [<AllowNullLiteral>]
     type UnaryMethodDefinition =
         interface end
@@ -52,25 +41,9 @@ module grpc =
         // obj
         interface end
 
-//   export type UnaryRpcOptions<M extends UnaryMethodDefinition<TRequest, TResponse>, TRequest extends jspb.Message, TResponse extends jspb.Message> = {
-//     host: string,
-//     request: TRequest,
-//     metadata?: Metadata.ConstructorArg,
-//     onEnd: (output: UnaryOutput<TResponse>) => void,
-//     transport?: Transport,
-//     debug?: boolean,
-//   }
-
     // type UnaryRpcOptions<'M, 'TRequest, 'TResponse when 'M :> UnaryMethodDefinition<'TRequest, 'TResponse> and 'TRequest :> protobuf.Message and 'TResponse :> protobuf.Message> =
     // type UnaryRpcOptions<'M, 'TRequest, 'TResponse when 'M :> UnaryMethodDefinition and 'TRequest :> protobuf.Message and 'TResponse :> protobuf.Message> =
     type UnaryRpcOptions =
         abstract host: string with get, set
         abstract request: 'TRequest with get, set
-        // abstract onEnd: (output: UnaryOutput<'TResponse>) => void,
-        // abstract onEnd: UnaryOutput -> unit with get, set
-        // abstract onEnd: UnaryOutput -> unit
         abstract onEnd: (UnaryOutput -> unit) with get, set
-
-
-    type [<AllowNullLiteral>] UnaryRpcOptionsStatic =
-        [<Emit "new $0($1...)">] abstract Create: unit -> UnaryRpcOptions //<'M, 'TRequest, 'TResponse>
