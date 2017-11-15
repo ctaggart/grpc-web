@@ -47,7 +47,8 @@ module grpc =
         // obj
         interface end
 
-    type UnaryOutput<'TResponse> =
+    // type UnaryOutput<'TResponse> =
+    type UnaryOutput =
         // obj
         interface end
 
@@ -65,6 +66,11 @@ module grpc =
     type UnaryRpcOptions =
         abstract host: string with get, set
         abstract request: 'TRequest with get, set
+        // abstract onEnd: (output: UnaryOutput<'TResponse>) => void,
+        // abstract onEnd: UnaryOutput -> unit with get, set
+        // abstract onEnd: UnaryOutput -> unit
+        abstract onEnd: (UnaryOutput -> unit) with get, set
+
 
     type [<AllowNullLiteral>] UnaryRpcOptionsStatic =
         [<Emit "new $0($1...)">] abstract Create: unit -> UnaryRpcOptions //<'M, 'TRequest, 'TResponse>

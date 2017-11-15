@@ -3,6 +3,7 @@ module FableApp
 open Fable.Core
 open Fable.Core.JsInterop
 open Fable.Import
+open book_service_pb
 
 // function getBook() {
 //   const getBookRequest = new GetBookRequest();
@@ -23,7 +24,8 @@ open Fable.Import
 //   });
 // }
 
-let host = "https://localhost:9091"
+// let host = "https://localhost:9091"
+let host = "http://127.0.0.1:9090"
 
 // open BookServicePb
 // open book_service_pb
@@ -50,12 +52,18 @@ let getBook() =
     // import {grpc, Code, Metadata} from "grpc-web-client";
     let rpc: grpc.grpc.IExports = import "grpc" "grpc-web-client"
 
+    let printOutput output =
+        printfn "output: %A" output
+
     // let options = rpc.UnaryRpcOptions.Create() // rpc.UnaryRpcOptions is not a constructor
     let options = jsOptions<grpc.grpc.UnaryRpcOptions>(fun o ->
         o.request <- getBookRequest
         o.host <- host
+        // o.onEnd <- (fun output -> printfn "did it")
+        o.onEnd <- printOutput
     )
 
+    // let examplecom_library_book_service_pb = jsNative
     // let method = service.GetBook
     let method =
         createObj [
@@ -63,8 +71,12 @@ let getBook() =
             "service" ==> createObj [ "serviceName" ==> "examplecom.library.BookService" ]
             "requestStream" ==> false
             "responseStream" ==> false
-            "requestType" ==> "examplecom_library_book_service_pb.GetBookRequest"
-            "responseType" ==> "examplecom_library_book_service_pb.Book"
+            // "requestType" ==> "examplecom_library_book_service_pb.GetBookRequest"
+            // "requestType" ==> examplecom_library_book_service_pb?GetBookRequest
+            "requestType" ==> pb.GetBookRequest
+            // "responseType" ==> "examplecom_library_book_service_pb.Book"
+            // "responseType" ==> examplecom_library_book_service_pb?Book
+            "responseType" ==> pb.Book
         ]
     // options.onEnd <- fun res -> printfn "got book response"
 
